@@ -1,0 +1,15 @@
+server:
+  port: 10000
+spring:
+  application:
+    name: demo
+  boot:
+    liveReload: true;
+  datasource:
+    password: root
+    url: jdbc:mysql://localhost:3306/demo
+    username: root
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
