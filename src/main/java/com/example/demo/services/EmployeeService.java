@@ -6,6 +6,7 @@ import com.example.demo.repositorise.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.swing.plaf.PanelUI;
 import java.util.List;
 
 @Service
@@ -13,6 +14,7 @@ import java.util.List;
 public class EmployeeService {
     private final EmployeeRepository employeeRepository;
 
+    // CRUD employee
     public void deleteEmployee(Long Id){
         employeeRepository.deleteById(Id);
     }
@@ -39,5 +41,4 @@ public class EmployeeService {
         exist.setPassword(request.getPassword());
         return employeeRepository.save(exist);
     }
-
 }
