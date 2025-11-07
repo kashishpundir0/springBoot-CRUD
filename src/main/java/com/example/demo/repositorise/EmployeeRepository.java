@@ -9,4 +9,7 @@ import java.util.Optional;
 
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     List<Employee> findAllByNumberContaining(String num);
+    Optional<Employee> findByToken(String token);
+
+    Optional<Employee> findByEmail(String username);
 }

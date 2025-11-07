@@ -1,5 +1,6 @@
 package com.example.demo.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,13 +22,26 @@ public class Employee {
 
     private String number;
 
-    @Column(unique = true)
+    @Column(unique = true,updatable = false)
     private String email;
 
+    @Enumerated(EnumType.STRING)
+    private Role level;
+
+    @JsonIgnore
+    private String token;
+
+    @JsonIgnore
     @Column(nullable = false)
     private String password;
 
     @OneToMany
-    private List<Tasks> tasks;
+    private List<Task> tasks;
+
+    public enum Role{
+        A,
+        B,
+        C
+    }
 
 }
