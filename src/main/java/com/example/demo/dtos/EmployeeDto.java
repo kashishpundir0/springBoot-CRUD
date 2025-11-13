@@ -15,4 +15,5 @@ public class EmployeeDto {
     private Employee.Role level;
 
     private String password;
+    private String city;
 }

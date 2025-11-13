@@ -5,14 +5,17 @@ import com.example.demo.dtos.TaskDto;
 import com.example.demo.entities.Employee;
 import com.example.demo.repositorise.EmployeeRepository;
 import com.example.demo.services.EmployeeService;
+import com.example.demo.services.LocationService;
 import com.example.demo.services.TaskService;
 import com.example.demo.utility.JwtTOkenUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -26,6 +29,7 @@ public class EmployeeController {
     private final TaskService taskService;
     private final JwtTOkenUtil jwtTOkenUtil;
     public final EmployeeRepository employeeRepository;
+    private final LocationService locationService;
 
     @DeleteMapping("/delete/{Id}") // to delete the data
      public ResponseEntity<?> deleteUser(@PathVariable Long Id){
@@ -40,12 +44,12 @@ public class EmployeeController {
     }
 
     @GetMapping("/login")
-    public ResponseEntity<?> getUSernameFromToken(@RequestHeader ("Authorization") String authHeader){
+    public ResponseEntity<?> getUsernameFromToken(@RequestHeader ("Authorization") String authHeader){
      String token = authHeader.substring(7);
 
      String email = jwtTOkenUtil.extractUsername(token);
 
-     Employee employee = employeeRepository.findByEmail(email).orElseThrow(()-> new RuntimeException("USer not found"));
+     Employee employee = employeeRepository.findByEmail(email).orElseThrow(()-> new RuntimeException("User not found"));
      return ResponseEntity.of(Optional.of(Map.of("username is : ", employee.getName())));
     }
     @PostMapping("/login")
@@ -80,6 +84,18 @@ public class EmployeeController {
     @PostMapping("/createTask")
     public ResponseEntity<?> createTask(@ModelAttribute TaskDto request){
         return ResponseEntity.ok(taskService.createTask(request));
+    }
+
+    @GetMapping("/location/{id}")
+    public ResponseEntity<?> getLocation(@RequestParam String lat,
+                                         @RequestParam String Long) throws URISyntaxException, JsonProcessingException {
+        return ResponseEntity.ok(locationService.getCity(lat,Long));
+    }
+
+    @PutMapping("/set")
+    public ResponseEntity<?> getLocation(@RequestHeader("Authorization") String auth ,@RequestParam String lat,
+                                         @RequestParam String Long) throws URISyntaxException, JsonProcessingException {
+        return ResponseEntity.ok(locationService.setCity(auth.substring(7),lat,Long));
     }
 
 }

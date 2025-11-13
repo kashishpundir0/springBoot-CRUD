@@ -8,9 +8,14 @@ import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RequestMapping("/task")
+
 public class TaskController {
     private final TaskService taskService;
 
+    @PostMapping("/create")
+    public ResponseEntity<?> createTask(@ModelAttribute TaskDto request){
+        return ResponseEntity.ok(taskService.createTask(request));
+    }
     @GetMapping("/all")
     public ResponseEntity<?> getAllTask(@ModelAttribute TaskDto request){
         return ResponseEntity.ok(taskService.getAllTasks());

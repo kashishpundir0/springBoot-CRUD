@@ -44,4 +44,9 @@ public class Employee {
         C
     }
 
+    private String lat;
+    private String lon;
+    @Column
+    private String city;
+
 }

@@ -15,3 +15,5 @@ spring:
       ddl-auto: update
 secret:
   key: SmXhmb3JdHFjsCDRfiv0yXE0ngiJfatIiYpCJUoObLE=
+map:
+  key: 691595e6639be959119671rbsff89ac

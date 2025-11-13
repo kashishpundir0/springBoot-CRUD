@@ -41,7 +41,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
         String authorizationHeader = request.getHeader("Authorization");
-        try {
             if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
                 String token = authorizationHeader.substring(7);
                 String username = jwtTokenUtil.extractUsername(token);
@@ -63,37 +62,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                     }
                 }
             }
-        } catch (JwtException ex) {
-            if (!response.isCommitted()) {
-                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-                response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-
-                Map<String, Object> error = new HashMap<>();
-                error.put("timestamp", Instant.now().toString());
-                error.put("status", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                error.put("error", "Internal server Error");
-                error.put("message", "JWT is missing or invalid");
-
-                new ObjectMapper().writeValue(response.getWriter(), error);
-            }
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.setContentType("application/json;charset=UTF-8");
-
-            try (PrintWriter writer = response.getWriter()) {
-                Map<String, Object> errorBody = new LinkedHashMap<>();
-                errorBody.put("timestamp", Instant.now());
-                errorBody.put("status", 401);
-                errorBody.put("error", "Internal server Error");
-                errorBody.put("message", ex.getMessage());
-                errorBody.put("path", request.getRequestURI());
-
-                ObjectMapper mapper = new ObjectMapper();
-                writer.write(mapper.writeValueAsString(errorBody));
-                writer.flush();
-            } catch (IOException ignored) {
-            }
-        }
         chain.doFilter(request, response);
     }
 }

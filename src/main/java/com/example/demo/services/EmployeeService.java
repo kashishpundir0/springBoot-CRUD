@@ -19,7 +19,7 @@ public class EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTOkenUtil jwtTOkenUtil;
-
+    private final LocationService loc;
     // CRUD employee
     public void deleteEmployee(Long Id){
         employeeRepository.deleteById(Id);
@@ -50,3 +50,7 @@ public class EmployeeService {
         return employeeRepository.save(exist);
     }
 }
+// token has three part header, payload, signature
+//header - never chang ,basic information
+// payload - user id, username , expire date, issue data
+// signature - secret
